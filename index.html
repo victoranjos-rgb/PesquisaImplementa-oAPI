@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta do GitHub</title>
+</head>
+<body>
+    <h1>Consulta do GitHub</h1>
+
+    <input type="text" id="username" placeholder="Digite o nome de usuário do GitHub">
+    <button onclick="buscarUsuario()">Pesquisar</button>
+
+    <div id="resultado"></div>
+
+    <script>
+        async function buscarUsuario() {
+            const usuario = document.getElementById('username').value;
+
+            const url = `https://api.github.com/users/${usuario}`;
+
+            const resposta = await fetch(url);
+            
+            if(resposta.ok){
+                const dados = await resposta.json();
+                document.getElementById('resultado').innerHTML = `
+                    <h2>${dados.login}</h2>
+                    <p>Repositórios públicos: ${dados.public_repos}</p>
+                    <p>Seguidores: ${dados.followers}</p>
+                    <p>Seguindo: ${dados.following}</p>
+                    <p>Bio: ${dados.bio}</p>
+                    <p>Id: ${dados.id}</p>
+                    <img src="${dados.avatar_url}" alt="Avatar do usuário" width="100">
+                `;
+            } else {
+                document.getElementById('resultado').innerHTML = `<p>Usuário não encontrado.</p>`;
+            }
+        }
+
+    </script>
+</body>
+</html>
